@@ -91,8 +91,11 @@ void search_and_patch_r(string indent, uint8_t* cstart, uint8_t* cend, pattern_t
     }
 }
 
-std::vector<uint8_t> HexToBytes(const std::string& hex) {
+std::vector<uint8_t> HexToBytes(const std::string& hex_) {
     std::vector<uint8_t> bytes;
+    std::string hex(hex_);
+    // https://stackoverflow.com/questions/83439/remove-spaces-from-stdstring-in-c
+    hex.erase( remove_if( hex.begin(), hex.end(), isspace ), hex.end() );
 
     for (unsigned int i = 0; i < hex.length(); i += 2) {
         std::string byteString = hex.substr(i, 2);
@@ -113,7 +116,7 @@ std::vector<uint8_t> StringToBytes(const std::string& str) {
 bool IsThisStringAHexNumber(std::string const &str)
 {
     for (size_t i = 0, n = str.length(); i < n; ++i)
-        if (!std::isxdigit(str[i]))
+        if (!std::isxdigit(str[i]) && !isspace( str[ i ] ))
             return false;
 
     return true;
